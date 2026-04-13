@@ -1,6 +1,6 @@
 ---
 name: creative-insights
-description: Use this skill when the user asks for creative or visual analysis of images, branding feedback, visual critique, creative scores, design quality assessment, or batch analysis of multiple images for creative insights.
+description: Use this skill when the user asks for creative or visual analysis of images, branding feedback, visual critique, creative scores, design quality assessment, batch analysis of multiple images for creative insights, ad creative analysis, marketing image review, or product photo feedback.
 version: 1.0.0
 ---
 
@@ -30,11 +30,12 @@ Each creative insight costs **0.75 credits**. Always inform the user of this cos
    ```
    creative_insights_create({ image_url: "<url>" })
    ```
-   The image can be a URL or a Vanikya asset/generation reference.
-3. **Get result:**
+   The `image_url` must be a publicly accessible URL. To use a Vanikya generation, first call `imagine_get_generation({ id: "<id>" })` and use the returned image URL from the result.
+3. **Poll until complete** using exponential backoff (3s → 6s → 12s…). Stop after 5 retries:
    ```
    creative_insights_get({ id: "<insight_id>" })
    ```
+   Repeat until `status` is `"completed"` or `"failed"`.
 4. Present the creative analysis to the user.
 
 ## Workflow — Multiple Images
@@ -55,6 +56,15 @@ Each creative insight costs **0.75 credits**. Always inform the user of this cos
 ```
 creative_insights_list({ limit: 10, offset: 0 })
 ```
+
+## Deleting an Insight
+
+Only delete when the user explicitly requests it:
+```
+creative_insights_delete({ id: "<insight_id>" })
+```
+
+Always confirm with the user before deleting — deletions are permanent.
 
 ## Rules
 

@@ -1,6 +1,6 @@
 ---
 name: seo-analysis
-description: Use this skill when the user asks to analyze SEO of a URL or website, run an SEO audit, get SEO insights or recommendations, check a page's search engine optimization, or batch-analyze multiple URLs for SEO.
+description: Use this skill when the user asks to analyze SEO of a URL or website, run an SEO audit, get SEO insights or recommendations, check a page's search engine optimization, batch-analyze multiple URLs for SEO, or compare the SEO of multiple pages.
 version: 1.0.0
 ---
 
@@ -25,7 +25,7 @@ Analyze web pages for SEO quality using Vanikya's AI-powered SEO analysis tools.
    ```
    seo_analysis_create({ url: "<url>" })
    ```
-2. **Poll status** using exponential backoff (3s → 6s → 12s…) until complete:
+2. **Poll status** using exponential backoff (3s → 6s → 12s → 24s…) until `status` is `"completed"` or `"failed"`. Stop after 5 retries (~90 seconds):
    ```
    seo_analysis_get({ id: "<analysis_id>" })
    ```
@@ -50,6 +50,15 @@ seo_analysis_list({ limit: 10, offset: 0 })
 ```
 
 Returns the user's past analyses. Use `seo_analysis_get` to fetch full results for any entry.
+
+## Deleting an Analysis
+
+Only delete when the user explicitly requests it:
+```
+seo_analysis_delete({ id: "<analysis_id>" })
+```
+
+Always confirm with the user before deleting — deletions are permanent.
 
 ## Rules
 

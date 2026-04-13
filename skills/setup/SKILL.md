@@ -54,7 +54,9 @@ Vanikya uses OAuth via Clerk. On first connection:
 claude mcp list
 ```
 
-Should show `vanikya` in the list with status `connected`.
+Should show `vanikya` listed with the HTTP transport URL (`https://prod.vanikya.com/mcp`).
+
+Once confirmed, try asking Claude to generate an image, run an SEO analysis, or check your credit balance.
 
 ## Troubleshooting
 

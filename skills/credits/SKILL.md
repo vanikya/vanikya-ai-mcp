@@ -1,6 +1,6 @@
 ---
 name: credits
-description: Use this skill when the user asks about their Vanikya credit balance, available credit packages or pricing, how to buy more credits, or what subscription plan they are on.
+description: Use this skill when the user asks about their Vanikya credit balance, available credit packages or pricing, how to buy more credits, what subscription plan they are on, ran out of credits, or why a generation failed due to insufficient credits.
 version: 1.0.0
 ---
 
@@ -39,7 +39,11 @@ Returns a list of one-time credit packages, each with:
 - `name` — package name
 - `credits` — number of credits included
 
+> **Note:** Pricing is not returned by this tool. Direct the user to [vanikya.com](https://vanikya.com) to see pricing details before purchasing.
+
 ## Buy Credits
+
+This generates one-time credit top-up links only — for subscription changes, direct the user to the Vanikya dashboard.
 
 1. Call `credits_list_packages()` to get available packages.
 2. Show the user the options.
