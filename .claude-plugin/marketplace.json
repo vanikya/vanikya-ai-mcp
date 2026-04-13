@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "vanikya-ai-mcp",
+  "description": "Vanikya AI tools for Claude Code — image, video, vector & lottie generation, SEO analysis, creative insights, and credits via MCP",
+  "owner": {
+    "name": "Vanikya"
+  },
+  "plugins": [
+    {
+      "name": "vanikya-ai-mcp",
+      "description": "Claude Code plugin for Vanikya AI — image, video, vector & lottie generation, SEO analysis, creative insights, and credits directly in Claude via MCP.",
+      "source": ".",
+      "category": "productivity",
+      "homepage": "https://vanikya.com"
+    }
+  ]
+}
