@@ -9,7 +9,7 @@
     {
       "name": "vanikya-ai-mcp",
       "description": "Claude Code plugin for Vanikya AI — image, video, vector & lottie generation, SEO analysis, creative insights, and credits directly in Claude via MCP.",
-      "source": ".",
+      "source": "./plugins/vanikya-ai-mcp",
       "category": "productivity",
       "homepage": "https://vanikya.com"
     }
