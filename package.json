@@ -1,0 +1,6 @@
+{
+  "name": "vanikya-ai-mcp",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for Vanikya AI — image generation, SEO analysis, creative insights, and credits via MCP",
+  "license": "MIT"
+}
