@@ -5,7 +5,6 @@ Connect [Vanikya](https://vanikya.com) to Claude Code and Claude Desktop. Genera
 ## Installation
 
 ```bash
-/plugin marketplace add vanikya/vanikya-ai-mcp
 /plugin install vanikya-ai-mcp
 ```
 

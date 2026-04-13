@@ -25,7 +25,7 @@ Analyze web pages for SEO quality using Vanikya's AI-powered SEO analysis tools.
    ```
    seo_analysis_create({ url: "<url>" })
    ```
-2. **Poll status** using exponential backoff (3s → 6s → 12s → 24s…) until `status` is `"completed"` or `"failed"`. Stop after 5 retries (~90 seconds):
+2. **Poll status** until `status` is `"completed"` or `"failed"`. Stop after 5 retries:
    ```
    seo_analysis_get({ id: "<analysis_id>" })
    ```

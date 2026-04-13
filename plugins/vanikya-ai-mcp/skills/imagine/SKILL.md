@@ -48,24 +48,29 @@ Use assets as reference images in generation or editing workflows.
 
 ### Generating an image (raster)
 
-1. **Enhance the prompt** (always, unless user provides a detailed prompt):
+1. **List available models** to get valid model IDs:
+   ```
+   imagine_list_models()
+   ```
+   Pick a model ID from the result (e.g. `img_r3t8w5n1` for GPT-Image-1.5, `img_d4h1y9f7` for Flux 2).
+2. **Enhance the prompt** (always, unless user provides a detailed prompt):
    ```
    imagine_enhance_prompt({ prompt: "<user's raw prompt>" })
    ```
-2. **Estimate credits** and confirm with the user:
+3. **Estimate credits** and confirm with the user:
    ```
-   imagine_estimate_credits({ prompt: "<enhanced prompt>", model_id: "<model_id>" })
+   imagine_estimate_credits({ prompt: "<enhanced prompt>", models: ["<model_id>"] })
    ```
    If the user declines, stop — do not proceed with generation. Ask if they'd like to choose a cheaper model or adjust the prompt.
-3. **Generate**:
+4. **Generate**:
    ```
-   imagine_generate_image({ prompt: "<enhanced prompt>", model_id: "<model_id>" })
+   imagine_generate_image({ prompt: "<enhanced prompt>", models: ["<model_id>"] })
    ```
-4. **Poll until complete** using exponential backoff (wait 3s → 6s → 12s → 24s…):
+5. **Poll until complete** — call `imagine_get_generation` repeatedly until `status` changes from `"pending"`:
    ```
    imagine_get_generation({ id: "<generation_id>" })
    ```
-   Repeat until `status` is `"completed"` or `"failed"`. Stop after 5 retries (~90 seconds total). If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
+   Repeat until `status` is `"completed"` or `"failed"`. Stop after 5 retries. If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
 
 ### Generating a video
 
@@ -76,7 +81,7 @@ Use assets as reference images in generation or editing workflows.
 2. Pick a model ID from the result.
 3. Estimate credits and confirm with the user. If the user declines, stop — do not proceed with generation. Ask if they'd like to choose a cheaper model or adjust the prompt.
 4. Call `imagine_generate_video`.
-5. Poll `imagine_get_generation` with exponential backoff. Stop after 5 retries (~90 seconds total). If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
+5. Poll `imagine_get_generation` until complete. Stop after 5 retries. If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
 
 ### Generating a vector (SVG)
 
@@ -86,7 +91,7 @@ Use assets as reference images in generation or editing workflows.
    ```
 2. Enhance prompt, estimate credits and confirm with the user. If the user declines, stop — do not proceed with generation. Ask if they'd like to choose a cheaper model or adjust the prompt.
 3. Call `imagine_generate_image` with a model ID from the `imagine_list_models({ type: "vector" })` result — do NOT use a raster model ID.
-4. Poll until complete. Stop after 5 retries (~90 seconds total). If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
+4. Poll until complete. Stop after 5 retries. If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
 
 ### Generating a lottie animation
 
@@ -96,7 +101,7 @@ Use assets as reference images in generation or editing workflows.
    ```
 2. Enhance prompt, estimate credits and confirm with the user. If the user declines, stop — do not proceed with generation. Ask if they'd like to choose a cheaper model or adjust the prompt.
 3. Call `imagine_generate_image` with a model ID from the `imagine_list_models({ type: "lottie" })` result — do NOT use a raster model ID.
-4. Poll until complete. Stop after 5 retries (~90 seconds total). If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
+4. Poll until complete. Stop after 5 retries. If still pending, inform the user the generation may be stuck and suggest checking the Vanikya dashboard.
 5. **Note:** Editing lottie generations is not supported. If the user wants changes, regenerate with a revised prompt.
 
 ### Editing an image
@@ -107,8 +112,9 @@ Use assets as reference images in generation or editing workflows.
 
 ## Rules
 
+- **Always** call `imagine_list_models` before generating to get valid model IDs — never guess a model ID.
 - **Always** call `imagine_enhance_prompt` before generating unless the user's prompt is already detailed (over 50 words).
 - **Always** call `imagine_estimate_credits` and show the user the cost before generating.
 - **Always** poll `imagine_get_generation` after any generation call — it is async and returns `status: "pending"` immediately.
 - **Never** skip credit estimation — generations can be expensive and the user must consent.
-- For video and non-default output types, **always** call `imagine_list_models` with the correct `type` first.
+- For video, vector, and lottie output types, **always** call `imagine_list_models` with the correct `type` parameter — do NOT use model IDs from a different type.

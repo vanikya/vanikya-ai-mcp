@@ -31,7 +31,7 @@ Each creative insight costs **0.75 credits**. Always inform the user of this cos
    creative_insights_create({ image_url: "<url>" })
    ```
    The `image_url` must be a publicly accessible URL. To use a Vanikya generation, first call `imagine_get_generation({ id: "<id>" })` and use the returned image URL from the result.
-3. **Poll until complete** using exponential backoff (3s → 6s → 12s…). Stop after 5 retries:
+3. **Poll until complete**. Stop after 5 retries:
    ```
    creative_insights_get({ id: "<insight_id>" })
    ```
