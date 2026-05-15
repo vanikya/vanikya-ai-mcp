@@ -1,7 +1,7 @@
 ---
 name: credits
 description: Use this skill when the user asks about their Vanikya credit balance, available credit packages or pricing, how to buy more credits, what subscription plan they are on, ran out of credits, or why a generation failed due to insufficient credits.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Vanikya Credits
@@ -24,9 +24,9 @@ credits_get_balance()
 
 Returns:
 - `credits` — current balance
-- `plan.name` — active subscription plan name
-- `plan.status` — subscription status (active, cancelled, etc.)
-- `plan.interval` — billing interval (monthly, yearly)
+- `plan.name` — active subscription plan name (or `null` if no plan)
+- `plan.product_id` — Dodo product id for the active plan
+- `plan.is_paid` — whether the plan is paid (vs. a free tier)
 
 ## Browse Packages
 

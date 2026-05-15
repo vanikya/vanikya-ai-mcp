@@ -1,7 +1,7 @@
 ---
 name: seo-analysis
 description: Use this skill when the user asks to analyze SEO of a URL or website, run an SEO audit, get SEO insights or recommendations, check a page's search engine optimization, batch-analyze multiple URLs for SEO, or compare the SEO of multiple pages.
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Vanikya SEO Analysis
@@ -12,36 +12,38 @@ Analyze web pages for SEO quality using Vanikya's AI-powered SEO analysis tools.
 
 | Tool | Purpose |
 |---|---|
-| `seo_analysis_create` | Run SEO analysis on a single URL |
-| `seo_analysis_batch_create` | Run SEO analysis on multiple URLs at once |
-| `seo_analysis_batch_status` | Poll the status of a batch job |
-| `seo_analysis_get` | Get a specific analysis result by ID |
+| `seo_analysis_create` | Run SEO analysis on a single URL (synchronous — returns the result directly) |
+| `seo_analysis_batch_create` | Run SEO analysis on up to 10 URLs at once (async — returns job ids) |
+| `seo_analysis_batch_status` | Poll status of batch jobs by ids |
+| `seo_analysis_get` | Get a specific analysis result by id |
 | `seo_analysis_list` | List past SEO analyses |
 | `seo_analysis_delete` | Delete an analysis |
 
 ## Workflow — Single URL
 
-1. **Start analysis:**
+1. Confirm the URL with the user.
+2. **Run analysis** (synchronous — returns the completed result in one call, no polling needed):
    ```
    seo_analysis_create({ url: "<url>" })
    ```
-2. **Poll status** until `status` is `"completed"` or `"failed"`. Stop after 5 retries:
-   ```
-   seo_analysis_get({ id: "<analysis_id>" })
-   ```
-3. Present the results to the user.
+   Typically completes in 15–45 seconds.
+3. Present the results to the user — highlight critical issues first.
 
 ## Workflow — Multiple URLs
 
-1. **Start batch:**
+1. **Start batch** — returns an `ids` array (max 10 URLs):
    ```
    seo_analysis_batch_create({ urls: ["<url1>", "<url2>", ...] })
    ```
-2. **Poll batch status:**
+2. **Poll batch status** with the returned ids using exponential backoff (3s, 6s, 12s, 24s…):
    ```
-   seo_analysis_batch_status({ batch_id: "<batch_id>" })
+   seo_analysis_batch_status({ ids: ["<id1>", "<id2>", ...] })
    ```
-3. Once complete, retrieve individual results with `seo_analysis_get` for each ID in the batch.
+   Stop after 5 retries.
+3. Once complete, retrieve full results:
+   ```
+   seo_analysis_get({ id: "<analysis_id>" })
+   ```
 
 ## Browsing Past Analyses
 
@@ -63,5 +65,5 @@ Always confirm with the user before deleting — deletions are permanent.
 ## Rules
 
 - Always confirm the URL with the user before running analysis.
-- For batch jobs, poll `seo_analysis_batch_status` until status is `"completed"` or `"failed"` before fetching results.
+- `seo_analysis_create` is **synchronous** — do not poll. `seo_analysis_batch_create` is async — poll `seo_analysis_batch_status` with the returned ids.
 - Present results in a structured, readable format — highlight critical issues first.
